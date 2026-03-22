@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smol - Simple URL Shortener</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Kanagawa Lotus palette ── */
+    :root {
+      --lotus-bg0:      #d5cead;
+      --lotus-bg1:      #dcd5ac;
+      --lotus-bg2:      #e5ddb0;
+      --lotus-bg3:      #f2ecbc; /* main bg */
+      --lotus-bg4:      #e7dba0;
+      --lotus-bg5:      #e4d794;
+      --lotus-ink1:     #545464; /* main fg */
+      --lotus-ink2:     #43436c;
+      --lotus-gray:     #8a8980;
+      --lotus-red:      #c84053;
+      --lotus-orange:   #cc6d00;
+      --lotus-yellow:   #c77a1f;
+      --lotus-green:    #6f894e;
+      --lotus-aqua:     #4e8ca2;
+      --lotus-blue:     #4d699b;
+      --lotus-pink:     #b35b79;
+      --lotus-violet:   #624c83;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Serif', Georgia, serif;
+      background-color: var(--lotus-bg3);
+      color: var(--lotus-ink1);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      /* subtle paper grain */
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(196,160,84,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(78,140,162,0.07) 0%, transparent 55%);
+    }
+
+    /* ── card ── */
+    .card {
+      background: var(--lotus-bg2);
+      border: 1.5px solid var(--lotus-bg0);
+      border-radius: 6px;
+      padding: 2.6rem 2.8rem 2.4rem;
+      width: 360px;
+      box-shadow:
+        0 2px 8px rgba(84,84,100,0.10),
+        0 8px 32px rgba(84,84,100,0.07);
+      position: relative;
+      animation: rise 0.55s cubic-bezier(.22,.68,0,1.2) both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)   scale(1);    }
+    }
+
+    /* decorative corner flourish */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 40px; height: 40px;
+      border-top: 3px solid var(--lotus-aqua);
+      border-left: 3px solid var(--lotus-aqua);
+      border-radius: 6px 0 0 0;
+      opacity: 0.55;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 40px; height: 40px;
+      border-bottom: 3px solid var(--lotus-pink);
+      border-right: 3px solid var(--lotus-pink);
+      border-radius: 0 0 6px 0;
+      opacity: 0.45;
+    }
+
+    /* ── header ── */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      opacity: 0.85;
+    }
+
+    h1 {
+      font-family: 'Noto Serif', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--lotus-ink2);
+      line-height: 1;
+    }
+
+    h1 span {
+      color: var(--lotus-orange);
+    }
+
+    header p {
+      font-size: 0.82rem;
+      color: var(--lotus-gray);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-style: italic;
+    }
+
+    /* ── divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--lotus-bg0), transparent);
+      margin: 0 0 1.6rem;
+    }
+
+    /* ── form ── */
+    .field-label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lotus-gray);
+      margin-bottom: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    input[type="url"] {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.88rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--lotus-bg3);
+      color: var(--lotus-ink1);
+      border: 1.5px solid var(--lotus-bg0);
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    input[type="url"]::placeholder {
+      color: var(--lotus-gray);
+      opacity: 0.7;
+    }
+
+    input[type="url"]:focus {
+      border-color: var(--lotus-aqua);
+      box-shadow: 0 0 0 3px rgba(78,140,162,0.14);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.65rem;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--lotus-blue);
+      color: var(--lotus-bg3);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s, transform 0.12s;
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    button:hover {
+      background: var(--lotus-violet);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* ── result ── */
+    #result {
+      margin-top: 1.2rem;
+      min-height: 2.2rem;
+      font-size: 0.82rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--lotus-green);
+      background: rgba(111,137,78,0.08);
+      border-left: 3px solid var(--lotus-green);
+      border-radius: 0 3px 3px 0;
+      padding: 0.5rem 0.7rem;
+      display: none;
+      animation: fadein 0.3s ease both;
+      word-break: break-all;
+    }
+
+    #result.error {
+      color: var(--lotus-red);
+      background: rgba(200,64,83,0.07);
+      border-left-color: var(--lotus-red);
+    }
+
+    #result.show { display: block; }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0);   }
+    }
+
+    /* copy button inside result */
+    .copy-btn {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 0.1rem 0.45rem;
+      font-size: 0.7rem;
+      background: var(--lotus-bg0);
+      color: var(--lotus-ink2);
+      border: 1px solid var(--lotus-bg4);
+      border-radius: 3px;
+      cursor: pointer;
+      vertical-align: middle;
+      width: auto;
+      letter-spacing: 0.04em;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: var(--lotus-bg5); }
+
+    /* ── footer ── */
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--lotus-gray);
+      letter-spacing: 0.05em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    footer a {
+      color: var(--lotus-aqua);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <header>
+      <div class="logo-row">
+        <!-- lotus SVG icon -->
+        <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 24 C14 24 5 18 5 11 C5 7 8.5 4 12 5.5 C12 5.5 13 6 14 7 C15 6 16 5.5 16 5.5 C19.5 4 23 7 23 11 C23 18 14 24 14 24Z" fill="#b35b79" opacity="0.25"/>
+          <path d="M14 24 C14 24 7 16 8 10 C9 6.5 12 5 14 7 C16 5 19 6.5 20 10 C21 16 14 24 14 24Z" fill="#b35b79" opacity="0.45"/>
+          <path d="M14 24 C14 24 10 17 11 11.5 C11.8 8 13 7.5 14 9 C15 7.5 16.2 8 17 11.5 C18 17 14 24 14 24Z" fill="#b35b79" opacity="0.80"/>
+          <line x1="14" y1="24" x2="14" y2="12" stroke="#6f894e" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <h1>Sm<span>o</span>l</h1>
+      </div>
+      <p>simple, minimal url shortener</p>
+    </header>
+
+    <div class="divider"></div>
+
+    <form id="shortenForm" onsubmit="return false;">
+      <label class="field-label" for="originalUrl">Destination URL</label>
+      <input type="url" id="originalUrl" placeholder="https://example.com/very/long/path" required>
+      <button type="submit" id="submitBtn">⌗ Shorten URL</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <footer>
+    &copy; 2026 Smol &nbsp;·&nbsp; kanagawa lotus
+  </footer>
+
+  <script>
+    const form     = document.getElementById('shortenForm');
+    const btn      = document.getElementById('submitBtn');
+    const resultEl = document.getElementById('result');
+
+    form.addEventListener('submit', async () => {
+      const url = document.getElementById('originalUrl').value.trim();
+      if (!url) return;
+
+      btn.textContent = '… working';
+      btn.disabled = true;
+
+      await new Promise(r => setTimeout(r, 420)); // simulate async
+
+      const shortCode = Math.random().toString(36).substring(2, 8);
+      const shortUrl  = `https://smol.io/${shortCode}`;
+
+      resultEl.className = 'show';
+      resultEl.innerHTML =
+        `✦ <a href="${shortUrl}" style="color:inherit;text-decoration:underline;">${shortUrl}</a>` +
+        `<button class="copy-btn" onclick="copyUrl('${shortUrl}')">copy</button>`;
+
+      btn.textContent = '⌗ Shorten URL';
+      btn.disabled = false;
+    });
+
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        const cb = document.querySelector('.copy-btn');
+        if (cb) { cb.textContent = 'copied!'; setTimeout(() => cb.textContent = 'copy', 1500); }
+      });
+    }
+  </script>
+</body>
+</html>
