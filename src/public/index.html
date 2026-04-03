@@ -6,6 +6,40 @@
   <title>Smol - Simple URL Shortener</title>
 </head>
 <body>
-  <h1>Smol, a simple url shortener</h1>
+  <div class="card">
+    <header>
+      <p>simple, minimal url shortener</p>
+    </header>
+
+    <div class="divider"></div>
+
+    <form id="shortenForm" onsubmit="return false;">
+      <label class="field-label" for="originalUrl">Destination URL</label>
+      <input type="url" id="originalUrl" placeholder="https://example.com/very/long/path" required>
+      <button type="submit" id="submitBtn">⌗ Shorten URL</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('shortenForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault() 
+      
+      const url = e.target.originalUrl.value.trim()
+
+      if (!url) {
+        throw new Error("Invalid URL")
+      }
+
+      await fetch("/api/smol", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"}, 
+        body: JSON.stringify({ original: url })
+      })
+    });
+  </script>
 </body>
 
