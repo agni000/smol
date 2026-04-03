@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "Url" (
-    "id" TEXT NOT NULL,
-    "smol" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "smol" TEXT,
     "originalUrl" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

@@ -11,6 +11,7 @@
     "dev": "node --watch ./src/index.js"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.5.0",
     "express": "^5.2.1"
   },

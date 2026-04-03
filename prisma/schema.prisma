@@ -5,6 +5,7 @@
 
 generator client {
   provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -12,8 +13,8 @@ datasource db {
 }
 
 model Url {
-  id String @id @default(uuid()) 
-  smol String @unique
+  id Int @id @default(autoincrement())
+  smol String? @unique
   originalUrl String 
   createdAt DateTime @default(now())
 }
