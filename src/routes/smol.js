@@ -1,9 +1,11 @@
 import { Router } from 'express'
-import { helloSmol, postHandler } from '../controllers/smol.js'
+import { helloSmol, postUrlHandler, readUrlHandler } from '../controllers/smol.js'
 
 export const smolRouter = Router()
 
 smolRouter.get('/', helloSmol)
 
-smolRouter.post('/', postHandler)
+smolRouter.get('/:smol', readUrlHandler)
+
+smolRouter.post('/', postUrlHandler)
 

@@ -17,3 +17,15 @@ export const createUrl = async (url) => {
 
   return updateUrl
 }
+
+export const readUrl = async (smolUrl) => {
+  const url = await prisma.url.findUnique({
+    where: { smol: smolUrl }
+  })
+
+  if (!url) {
+    throw new Error("URL not found")
+  }
+
+  return url
+}
