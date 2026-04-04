@@ -6,11 +6,13 @@ export const postUrlHandler = async (request, response) => {
   console.log(`Request method: ${request.method}`)
   console.log(`Body: ${request.body.original}`)
 
-  const url = request.body.original?.trim()
+  let url = request.body.original
 
-  if (!url) {
+  if (!url || typeof url !== 'string') {
     return response.status(400).send({ error: 'Invalid URL' })
   }
+
+  url = url.trim()
 
   const isSafe = await isSafeUrl(url)
 
