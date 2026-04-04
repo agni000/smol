@@ -13,8 +13,10 @@ cp .env.example .env
 npm install
 npx prisma migrate dev
 npm run dev
+``` 
 
 ```mermaid 
+```
 flowchart LR
   subgraph client [Client]
     Browser
