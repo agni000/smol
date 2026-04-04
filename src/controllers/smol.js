@@ -1,5 +1,6 @@
 import { createUrl, readUrl } from "../lib/db.js"
 import { isSafeUrl } from "../utils/validateUrl.js"
+import 'dotenv/config'
 
 export const postUrlHandler = async (request, response) => {
   console.log(`Request method: ${request.method}`)
@@ -19,7 +20,7 @@ export const postUrlHandler = async (request, response) => {
 
   const newUrl = await createUrl(url)
   console.log(`new url object: ${JSON.stringify(newUrl)}`)
-  return response.status(201).json({ smolUrl: `http://localhost:6969/${newUrl.smol}`, smol: `${newUrl.smol}` })
+  return response.status(201).json({ smol: `${newUrl.smol}` })
 }
 
 export const readUrlHandler = async (request, response) => {

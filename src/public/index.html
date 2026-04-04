@@ -27,7 +27,7 @@
     const form = document.getElementById('shortenForm')
     const result = document.getElementById('result')
     const submitBtn = document.getElementById('submitBtn')
-
+    
     form.addEventListener('submit', async (e) => {
       e.preventDefault() 
       
@@ -59,8 +59,10 @@
           throw new Error(data.error || 'Could not generate smol url')
         }
         
+        const BASE_URL = window.location.origin
+
         result.className = 'show'
-        result.innerHTML = `Smol url: <a href="${data.smolUrl}" target="_blank">http://smol.io/${data.smol}</a>`
+        result.innerHTML = `Smol url: <a href="${BASE_URL}/${data.smol}" target="_blank" rel="noopener noreferrer">${BASE_URL}/${data.smol}</a>`
 
       } catch (err) {
         console.error(err) 
