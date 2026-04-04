@@ -40,9 +40,11 @@
         submitBtn.disabled = false 
         submitBtn.textContent = '⌗ Shorten URL'
         result.className = 'error'
-        result.innerHTML = `${response.error}`
+        result.innerHTML = `Invalid URL`
         return 
       }
+
+      let data = {}
 
       try {
         const response = await fetch("/", {
@@ -51,24 +53,22 @@
           body: JSON.stringify({ original: url })
         })
 
-        const body = await response.json().catch(() => ({}))
+        data = await response.json().catch(() => ({}))
 
         if (!response.ok) {
-          submitBtn.disabled = false
-          submitBtn.textContent = '⌗ Shorten URL'
-          result.className = 'error'
-          result.innerHTML = body.error ?? 'Could not generate smol url'
-          throw new Error("Request error")
+          throw new Error(data.error || 'Could not generate smol url')
         }
-
-        const data = await response.json()
         
         result.className = 'show'
         result.innerHTML = `Smol url: <a href="${data.smolUrl}" target="_blank">http://smol.io/${data.smol}</a>`
-        submitBtn.disabled = false
-        submitBtn.textContent = '⌗ Shorten URL'
+
       } catch (err) {
         console.error(err) 
+        result.className = 'error'
+        result.innerHTML = err.message
+      } finally {
+        submitBtn.disabled = false
+        submitBtn.textContent = '⌗ Shorten URL'
       }
     });
   </script>
