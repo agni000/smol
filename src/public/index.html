@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smol - Simple URL Shortener</title>
+  <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
   <div class="card">
@@ -23,22 +24,43 @@
   </div>
 
   <script>
-    const form = document.getElementById('shortenForm');
+    const form = document.getElementById('shortenForm')
+    const result = document.getElementById('result')
+    const submitBtn = document.getElementById('submitBtn')
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault() 
       
       const url = e.target.originalUrl.value.trim()
+      
+      submitBtn.textContent = '… working';
+      submitBtn.disabled = true;
 
       if (!url) {
         throw new Error("Invalid URL")
       }
+    
+      try {
+        const response = await fetch("/", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"}, 
+          body: JSON.stringify({ original: url })
+        })
 
-      await fetch("/api/smol", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"}, 
-        body: JSON.stringify({ original: url })
-      })
+        if (!response.ok) {
+          throw new Error("Request error")
+        }
+
+        const data = await response.json()
+        
+        result.className = 'show'
+        result.innerHTML = `Smol url: <a href="${data.smolUrl}" target="_blank">http://smol.io/${data.smol}</a>`
+        submitBtn.disabled = false
+        submitBtn.textContent = '⌗ Shorten URL';
+      } catch (err) {
+        console.error(err)
+        result.textContent = "Could not generate smol url"
+      }
     });
   </script>
 </body>
