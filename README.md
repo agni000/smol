@@ -15,6 +15,8 @@ npx prisma migrate dev
 npm run dev
 ```
 
+## Architecture
+
 ```mermaid
 flowchart LR
   subgraph client [Client]
@@ -37,6 +39,12 @@ flowchart LR
   Router --> Service
   Service --> PG
 ```
+
+## Core 
+- `POST /` →  create short code  
+- `GET /:smol` →  redirect  
+- Basic SSRF-safe URL validation  
+- Deterministic base62 codes
 
 ## TODO
 - [ ] Add unit and integration tests
