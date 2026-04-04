@@ -31,16 +31,19 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault() 
       
-      const url = e.target.originalUrl.value.trim()
+      const url = e.target.originalUrl?.value?.trim()
       
       submitBtn.textContent = '… working'
       submitBtn.disabled = true
 
       if (!url) {
-        throw new Error("Invalid URL")
-        submitBtn.disabled = false
+        submitBtn.disabled = false 
+        submitBtn.textContent = '⌗ Shorten URL'
+        result.className = 'error'
+        result.innerHTML = `${response.error}`
+        return 
       }
-    
+
       try {
         const response = await fetch("/", {
           method: "POST",
@@ -48,11 +51,13 @@
           body: JSON.stringify({ original: url })
         })
 
+        const body = await response.json().catch(() => ({}))
+
         if (!response.ok) {
-          submitBtn.textContent = '⌗ Shorten URL'
           submitBtn.disabled = false
+          submitBtn.textContent = '⌗ Shorten URL'
           result.className = 'error'
-          result.innerHTML = `${response.error}`
+          result.innerHTML = body.error ?? 'Could not generate smol url'
           throw new Error("Request error")
         }
 
@@ -63,8 +68,7 @@
         submitBtn.disabled = false
         submitBtn.textContent = '⌗ Shorten URL'
       } catch (err) {
-        console.error(err)
-        result.textContent = "Could not generate smol url"
+        console.error(err) 
       }
     });
   </script>

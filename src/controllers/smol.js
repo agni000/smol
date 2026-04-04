@@ -19,7 +19,7 @@ export const postUrlHandler = async (request, response) => {
 
   const newUrl = await createUrl(url)
   console.log(`new url object: ${JSON.stringify(newUrl)}`)
-  return response.status(200).json({ smolUrl: `http://localhost:6969/${newUrl.smol}`, smol: `${newUrl.smol}` })
+  return response.status(201).json({ smolUrl: `http://localhost:6969/${newUrl.smol}`, smol: `${newUrl.smol}` })
 }
 
 export const readUrlHandler = async (request, response) => {
