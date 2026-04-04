@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "agni",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch ./src/index.js"
@@ -13,10 +13,10 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.5.0",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "dotenv": "^17.3.1"
   },
   "devDependencies": {
-    "dotenv": "^17.3.1",
     "prisma": "^7.5.0"
   }
 }
