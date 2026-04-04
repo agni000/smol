@@ -1,15 +1,5 @@
-import path from "path"
-import { fileURLToPath } from "url"
 import { createUrl, readUrl } from "../lib/db.js"
 import { isSafeUrl } from "../utils/validateUrl.js"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-export const helloSmol = (request, response) => {
-  console.log(`Request method: ${request.method}`)
-  return response.status(200).sendFile(path.join(__dirname, "../public/index.html"))
-}
 
 export const postUrlHandler = async (request, response) => {
   console.log(`Request method: ${request.method}`)
