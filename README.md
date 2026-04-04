@@ -13,10 +13,9 @@ cp .env.example .env
 npm install
 npx prisma migrate dev
 npm run dev
-``` 
-
-```mermaid 
 ```
+
+```mermaid
 flowchart LR
   subgraph client [Client]
     Browser
@@ -25,7 +24,7 @@ flowchart LR
   subgraph server [Server]
     Static["express.static"]
     Router["Routes / Controllers"]
-    Service["Business Logic (validation, SSRF, encoding)"]
+    Service["Business Logic - validation, SSRF, encoding"]
   end
 
   subgraph data [Data]
@@ -38,3 +37,8 @@ flowchart LR
   Router --> Service
   Service --> PG
 ```
+
+## TODO
+- [ ] Add unit and integration tests
+- [ ] Dockerize application (app + database)
+- [ ] Implement rate limiting to prevent abuse
