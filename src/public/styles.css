@@ -215,6 +215,7 @@ button:active {
 }
 
 #result.error {
+  display: block;
   color: var(--lotus-red);
   background: rgba(200,64,83,0.07);
   border-left-color: var(--lotus-red);
