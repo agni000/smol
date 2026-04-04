@@ -24,7 +24,7 @@ export const readUrl = async (smolUrl) => {
   })
 
   if (!url) {
-    throw new Error("URL not found")
+    return null
   }
 
   return url

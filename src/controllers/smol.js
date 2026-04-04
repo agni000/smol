@@ -44,7 +44,6 @@ export const readUrlHandler = async (request, response) => {
   const url = await readUrl(smolUrl)
 
   if (!url) {
-    console.log(`original Url: ${url.originalUrl}`)
     return response.status(404).send({ error: 'URL not found' })
   }
 
