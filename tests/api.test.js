@@ -1,11 +1,10 @@
-// tests/urlHandlers.test.js
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 import request from 'supertest'
 import { app } from '../src/app.js'
 import * as db from '../src/lib/db.js'
 import * as validateUrl from '../src/utils/validateUrl.js'
 
-// Mock das funções do db e do validator
+/* db and url validator mock */
 vi.mock('../src/lib/db.js')
 vi.mock('../src/utils/validateUrl.js')
 
